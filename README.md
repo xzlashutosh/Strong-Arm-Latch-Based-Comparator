@@ -1,5 +1,5 @@
 # StrongARM-Latch-based-Analog-Comparator
-This repository presents the design of a StrongARM Latch based Analog Comparator implemented using Synopsis Custom Compiler on 28nm CMOS Technology.
+This repository presents the design of a StrongARM Latch based Analog Comparator implemented using Cadence on 180nm CMOS Technology.
 # Table of Contents
  * [Introduction](#Introduction)
  * [The StrongARM Latch](#The-StrongARM-Latch)
@@ -13,42 +13,25 @@ This repository presents the design of a StrongARM Latch based Analog Comparator
  * [References](#References)
 
 # Introduction:
-A differential Comparator is an integral part of analog to
-digital converters where it is used to perform quantisation and
-sampling. A standard opamp as a comparator is not preferred
-for these applications as it reduces the maximum sampling
-frequency that could be attained. In this design, a strongArm
-latch is used as the comparator core and is chosen as the core
-for this circuit because it consumes zero static power, produces
-full swing rail to rail outputs, requires single clock phase and
-provides higher sampling bandwidth. The strongArm latch
-stage is followed by a RS latch which is used to hold the
-output data during precharge phase of the strongArm latch.
+A differential comparator is a crucial component in analog-to-digital converters (ADCs), where it plays a vital role in quantization and sampling operations. Utilizing a standard operational amplifier (op-amp) as a comparator in these applications is generally suboptimal because it limits the achievable maximum sampling frequency. In this work, a StrongARM latch has been employed as the core comparator architecture. The StrongARM latch is selected due to its zero static power consumption, rail-to-rail output swing, single-phase clock operation, and superior sampling bandwidth. To maintain the output state during the precharge phase of the StrongARM latch, an RS latch is cascaded at the output, ensuring data retention and stability.
 
 # The StrongARM Latch:
-The StrongARM latch topology finds wide usage as a sense amplifier, a comparator, or simply a robust
-latch with high sensitivity.The latch consists of 5 NMOS and 5 PMOS transistors. Transistor M1 and M2 form the input differential pair, transistor M3-M6 form the cross coupled inverters, S1-S4 are the charging transistors and M7 is the tail current transistor. Operation of the latch consists of three phases, Reset, Amplification, and Regeneration.
+The StrongARM latch topology is widely recognized for its use in sense amplifiers, comparators, and robust latch circuits requiring high sensitivity. Structurally, it incorporates five NMOS and five PMOS transistors. Transistors M1 and M2 form the input differential pair, M3–M6 constitute the cross-coupled inverter network, S1–S4 serve as the precharge devices, and M7 functions as the tail current source.
 
-During the reset phase, input clock is low which turns of the tail current transistor M7 and the input differential pair M1 and M2 is disconnected. Nodes P,Q,X,Y charge to Vdd through the charging transistors S1,S2,S3,S4 which are on when clock is low. The entire circuit draws no current during reset phase as the cross coupled inverter are turned off.
+The operation of the latch can be divided into three distinct phases: Reset, Amplification, and Regeneration.
 
-The amplification phase begins as soon as clock goes from low to high turning off the charging transistors S1,S2,S3,S4 and
-turning on the tail current transistor M7, thereby activating the input differential pair M1,M2 which draws current
-proportional to the input provided at gate terminals of M1 and M2. The current drawn by M1 and M2 discharges the nodes P and Q which were precharged to Vdd.
+Reset Phase: When the clock signal is low, the tail transistor (M7) is turned off, isolating the differential input pair (M1, M2). Simultaneously, nodes P, Q, X, and Y are precharged to the supply voltage (Vdd) via the charging transistors (S1–S4), which are activated during this phase. Since the cross-coupled inverters are off, the circuit draws negligible static current.
 
-The regeneration phase begins when nodes P and Q discharge to Vdd-Vthn , turning M3 and M4 (NMOS transistors of cross coupled inverters) on. Nodes X and
-Y then begins discharging from Vdd. Since they form a cross
-coupled inverter with positive feedback, the node which discharges faster (i.e the one which draws higher current) and falls down to zero while the other node regenerates back to Vdd, depending on the polarity of input differential votalge. Hence it effectively performs the action of a comparator.
-<p align="center">
-<img src="/Images/StrongARM Latch Reference Diagram.png"></br>
-  Fig. 1: StrongARM Latch 
-</p>
+Amplification Phase: As the clock transitions from low to high, the charging transistors (S1–S4) are disabled, and the tail current source M7 is activated. This enables M1 and M2 to start conducting based on the input differential voltage, causing a differential discharge of nodes P and Q that were initially at Vdd.
+
+Regeneration Phase: When nodes P and Q discharge down to approximately Vdd–Vth (where Vth is the NMOS threshold voltage), NMOS transistors M3 and M4 in the cross-coupled inverter pair turn on. Nodes X and Y then start discharging from Vdd. Due to the positive feedback provided by the cross-coupled configuration, the node discharging faster (corresponding to the higher input voltage) will be pulled to ground, while the complementary node will regenerate towards Vdd. This mechanism effectively produces a digital output representing the sign of the input differential voltage.
+
+<p align="center"> <img src="/Images/StrongARM Latch Reference Diagram.png"></br> Fig. 1: StrongARM Latch </p>
 
 # RS Latch
-During the reset phase , the output nodes of the StrongArm Latch is precharged to Vdd, hence erasing its previous output which leads to the current output not representing a valid logic level, which confuses the subsequent stages. This issue is resolved by the addition of a reset-set latch connected to the output terminals of the StrongARM latch. The RS latch can change its state only if one of the output of the previous stage falls to zero. This latch then retains the state as the StrongARM latch enters reset phase. 
-<p align="center">
-<img src="/Images/StrongARM Latch followed by RS Latch.png"></br>
-  Fig. 2: StrongARM Latch followed by RS Latch 
-</p>
+During the reset phase, the outputs of the StrongARM latch are precharged to Vdd, which momentarily erases the stored data and can cause ambiguity for subsequent digital stages. To overcome this, an RS latch is introduced after the StrongARM latch. The RS latch updates its state only when one of the outputs of the StrongARM latch transitions to logic low (0). After capturing the output, the RS latch retains the logic state during the StrongARM latch's reset phase, thereby ensuring stable and valid output levels for the next stages in the circuit.
+
+<p align="center"> <img src="/Images/StrongARM Latch followed by RS Latch.png"></br> Fig. 2: StrongARM Latch followed by RS Latch </p>
 
 # Tools Used:
 
@@ -93,32 +76,34 @@ Implementation of RS Latch Cell:
 ## Simulations:
 ### Transient Analysis:
 Input Parameters:
-Fclk = 2GHz; Vdd = 1.8V; Vcm = 1V; Vdiff = 1mV
+Fclk = 0.625GHz; Vdd = 1.8V; Vcm = 1V; Vdiff = 1mV
 <p align="center">
-<img src="/Images/2GHz1mv.png"></br>
+<img src="/Images/0.625GHz1mv.png"></br>
   Fig. 8: Voltage vs time waveforms
 </p>
 
 Input Parameters:
-Fclk = 2GHz; Vdd = 1.8V; Vcm = 1V; Vdiff = 100mV
+Fclk = 0.625GHz; Vdd = 1.8V; Vcm = 0.5V; Vdiff = 1mV
 <p align="center">
-<img src="/Images/2Ghz100mv.png"></br>
+<img src="/Images/0.625GHz1mv2.png"></br>
   Fig. 9: Voltage vs time waveforms 
 </p>
 
 Input Parameters:
-Fclk = 2GHz; Vdd = 1.8V; Vcm = 0.5V; Vdiff = 100mV
+Fclk = 0.625GHz; Vdd = 1.8V; Vcm = 1V; Vdiff = 100mV
 <p align="center">
-<img src="/Images/2Ghz100mv2.png"></br>
+<img src="/Images/0.625Ghz100mv.png"></br>
   Fig. 10: Voltage vs time waveforms 
 </p>
 
 Input Parameters:
-Fclk = 2GHz; Vdd = 1.8V; Vcm = 0.5V; Vdiff = 1mV
+Fclk = 0.625GHz; Vdd = 1.8V; Vcm = 0.5V; Vdiff = 100mV
 <p align="center">
-<img src="/Images/2GHz1mv2.png"></br>
+<img src="/Images/0.625Ghz100mv2.png"></br>
   Fig. 11: Voltage vs time waveforms 
 </p>
+
+
 
 # Netlist of the circuit
 
@@ -132,7 +117,7 @@ Final Netlist of the circuit is as follows,
 • Ashutosh Sharma, MS SSIs, Aalto University, USN Norway, BME Budapest
 
 # Acknowledgements:
-• 
+• Template from Satish Kumar L, B.Tech(EEE), NIT, Tiruchirappalli
 
 # References:
 [1] B. Razavi, “The StrongARM Latch [a circuit for all seasons],” IEEE Solid State Circuits Mag., vol. 7, no. 2, pp. 12–17, Spring 2015. doi: 10.1109/MSSC.2015.2418155.
@@ -142,4 +127,5 @@ Final Netlist of the circuit is as follows,
 [3] A. Almansouri, A. Alturki, A. Alshehri, T. Al-Attar and H. Fariborzi, ”Improved StrongARM latch comparator: Design, analysis and performance evaluation,” 2017 13th Conference on Ph.D. Research in Microelectronics and Electronics (PRIME), 2017, pp. 89-92, doi: 10.1109/PRIME.2017.7974114.
 
 [4] R vinoth, S Ramasamy, ”Design and Implementation of High Speed Latched Comparator using gm/Id Sizing Method
+
 
