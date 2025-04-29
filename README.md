@@ -26,12 +26,13 @@ Amplification Phase: As the clock transitions from low to high, the charging tra
 
 Regeneration Phase: When nodes P and Q discharge down to approximately Vdd–Vth (where Vth is the NMOS threshold voltage), NMOS transistors M3 and M4 in the cross-coupled inverter pair turn on. Nodes X and Y then start discharging from Vdd. Due to the positive feedback provided by the cross-coupled configuration, the node discharging faster (corresponding to the higher input voltage) will be pulled to ground, while the complementary node will regenerate towards Vdd. This mechanism effectively produces a digital output representing the sign of the input differential voltage.
 
-<p align="center"> <img src="/Images/StrongARM Latch Reference Diagram.png"></br> Fig. 1: StrongARM Latch </p>
+<p align="center"> <img src="Images/StrongARM latch topology.png"></br> Fig. 1: StrongARM Latch </p>
+
 
 # RS Latch
 During the reset phase, the outputs of the StrongARM latch are precharged to Vdd, which momentarily erases the stored data and can cause ambiguity for subsequent digital stages. To overcome this, an RS latch is introduced after the StrongARM latch. The RS latch updates its state only when one of the outputs of the StrongARM latch transitions to logic low (0). After capturing the output, the RS latch retains the logic state during the StrongARM latch's reset phase, thereby ensuring stable and valid output levels for the next stages in the circuit.
 
-<p align="center"> <img src="/Images/StrongARM Latch followed by RS Latch.png"></br> Fig. 2: StrongARM Latch followed by RS Latch </p>
+<p align="center"> <img src="Images/The StrongARM latch followed by the RS latch.png"></br> Fig. 2: StrongARM Latch followed by RS Latch </p>
 
 # Tools Used:
 
@@ -51,26 +52,18 @@ Implementation of StrongARM Latch Cell:
 <img src="/Images/StrongARM Latch Schematic.png"></br>
   Fig. 3: StrongARM Latch Schematic 
 </p>
-<p align="center">
-<img src="/Images/StrongARM Latch Symbol.png"></br>
-  Fig. 4: StrongARM Latch Symbol 
-</p>
 
 ### RS Latch:
 Implementation of RS Latch Cell:
 <p align="center">
 <img src="/Images/RS Latch Schematic.png"></br>
-  Fig. 5: RS Latch Schematic 
-</p>
-<p align="center">
-<img src="/Images/RS Latch Symbol.png"></br>
-  Fig. 6: RS Latch Symbol 
+  Fig. 4: RS Latch Schematic 
 </p>
 
 ### Comparator Testbench:
 <p align="center">
 <img src="/Images/Comparator Testbench.png"></br>
-  Fig. 7: Testbench 
+  Fig. 5: Testbench 
 </p>
 
 ## Simulations:
