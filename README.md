@@ -84,16 +84,10 @@ Fclk = 0.625GHz; Vdd = 1.8V; Vcm = 0.5V; Vdiff = 1mV
 
 Input Parameters:
 Fclk = 0.625GHz; Vdd = 1.8V; Vcm = 1V; Vdiff = 100mV
-<p align="center">
-<img src="/Images/0.625Ghz100mv.png"></br>
-  Fig. 10: Voltage vs time waveforms 
-</p>
-
-Input Parameters:
 Fclk = 0.625GHz; Vdd = 1.8V; Vcm = 0.5V; Vdiff = 100mV
 <p align="center">
-<img src="/Images/0.625Ghz100mv2.png"></br>
-  Fig. 11: Voltage vs time waveforms 
+<img src="/Images/0.625GHz100mv0p5V1V.png"></br>
+  Fig. 10: Voltage vs time waveforms 
 </p>
 
 
